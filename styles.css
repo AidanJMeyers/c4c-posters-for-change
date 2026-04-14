@@ -161,6 +161,39 @@ body {
 }
 .poster-card:hover .zoom-hint { opacity: 1; }
 
+.poster-card .results {
+  padding: .5rem .75rem .7rem;
+  border-top: 1px dashed var(--border);
+  font-size: .78rem;
+  color: var(--ink-soft);
+  background: #faf8f3;
+}
+.poster-card .results .res-headline {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: .3rem;
+}
+.poster-card .results .res-headline .votes { color: var(--accent); }
+.poster-card .results .res-awards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem;
+}
+.poster-card .results .award-chip {
+  font-size: .7rem;
+  padding: .1rem .4rem;
+  border-radius: 10px;
+  background: #e8eaf0;
+  color: var(--ink);
+}
+.poster-card .results .award-chip.empower { background: #d4efdf; color: var(--empower); }
+.poster-card .results .award-chip.inspire { background: #faeccc; color: var(--inspire); }
+.poster-card .results .award-chip.connect { background: #e5d9f7; color: var(--connect); }
+.poster-card .results .award-chip.prevent { background: #f8d7d7; color: var(--prevent); }
+.poster-card .results .no-votes { font-style: italic; opacity: .7; }
+
 /* Sticky ballot */
 .ballot {
   position: fixed;

@@ -2,10 +2,13 @@
   const MAX_RANK = 8;
   const POSTERS = window.POSTERS || [];
   const AWARDS = window.AWARDS || [];
+  const CONFIG = window.C4C_CONFIG || {};
 
   // State: array of { id, award } in ranked order
   const state = {
     ballot: [],
+    allBallots: [],     // all previously-submitted ballots (from JSONBlob)
+    results: {},        // posterId -> { votes, avgRank, awardCounts }
   };
 
   // --- Helpers ---
@@ -45,6 +48,9 @@
           <span class="grade">${gradeLabel(p.grade)}</span>
         </div>
         <span class="zoom-hint">Click to zoom</span>
+        <div class="results" data-results-for="${p.id}">
+          <div class="res-headline"><span>Loading votes…</span></div>
+        </div>
       </div>`
     ).join("");
     $("#poster-count").textContent = POSTERS.length;
@@ -245,6 +251,31 @@
     return null;
   }
 
+  // --- Backend: JSONBlob (anonymous shared JSON store) ---
+  async function fetchAllBallots() {
+    if (!CONFIG.BLOB_URL) return { ballots: [] };
+    try {
+      const res = await fetch(CONFIG.BLOB_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error("GET " + res.status);
+      const data = await res.json();
+      if (!data || !Array.isArray(data.ballots)) return { ballots: [] };
+      return data;
+    } catch (e) {
+      console.warn("Could not fetch existing ballots:", e);
+      return { ballots: [] };
+    }
+  }
+
+  async function putAllBallots(doc) {
+    const res = await fetch(CONFIG.BLOB_URL, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(doc),
+    });
+    if (!res.ok) throw new Error("PUT " + res.status);
+    return res;
+  }
+
   async function submitBallot() {
     const payload = buildPayload();
     const err = validatePayload(payload);
@@ -254,31 +285,44 @@
     btn.disabled = true;
     btn.textContent = "Submitting...";
 
-    // Try FormSubmit.co AJAX endpoint → forwards to ameyers@rollins.edu
-    // First submission per email triggers a one-time confirmation email.
-    try {
-      const res = await fetch("https://formsubmit.co/ajax/ameyers@rollins.edu", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          _subject: `C4C Posters for Change 2026 — Ballot from ${payload.voterName}`,
-          _template: "table",
-          voterName: payload.voterName,
-          voterAffiliation: payload.voterAffiliation || "(not provided)",
-          submittedAt: payload.submittedAt,
-          ballot_json: JSON.stringify(payload.ballot, null, 2),
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && (data.success === "true" || data.success === true)) {
-        showSuccess("Your ballot has been emailed to the organizers. Thank you!");
-      } else {
-        throw new Error(data.message || "Upload failed");
+    // Fetch current, append (or replace), PUT back. One retry on conflict.
+    async function tryOnce() {
+      const doc = await fetchAllBallots();
+      let ballots = doc.ballots || [];
+      if (CONFIG.DEDUPE_BY_NAME) {
+        const norm = payload.voterName.trim().toLowerCase();
+        ballots = ballots.filter(
+          (b) => (b.voterName || "").trim().toLowerCase() !== norm
+        );
       }
+      ballots.push(payload);
+      await putAllBallots({ ballots });
+      return ballots;
+    }
+
+    try {
+      let ballots;
+      try {
+        ballots = await tryOnce();
+      } catch (e) {
+        console.warn("First submit attempt failed, retrying:", e);
+        await new Promise((r) => setTimeout(r, 600));
+        ballots = await tryOnce();
+      }
+      state.allBallots = ballots;
+      computeResults();
+      renderResultsOnCards();
+      // Keep the ballot on screen so voter can see their votes reflected below each poster.
+      showSuccess(
+        `Thanks, ${payload.voterName}! Your ballot has been recorded. Live results are now shown below each poster.`
+      );
     } catch (e) {
-      console.error(e);
-      // fallback: offer to download
-      if (confirm("Online submission failed. Download your ballot as a file to send manually?")) {
+      console.error("Submit failed:", e);
+      if (
+        confirm(
+          "Online submission failed. Download your ballot as a file to send manually?"
+        )
+      ) {
         downloadBallot(payload);
         showSuccess("Ballot saved as a file. Please email it to the organizers.");
       }
@@ -305,6 +349,69 @@
   function showSuccess(msg) {
     $("#success-msg").textContent = msg;
     $("#success-modal").classList.add("open");
+  }
+
+  // --- Results aggregation + render ---
+  function computeResults() {
+    const results = {};
+    POSTERS.forEach((p) => {
+      results[p.id] = { votes: 0, rankSum: 0, awardCounts: {} };
+    });
+    (state.allBallots || []).forEach((b) => {
+      (b.ballot || []).forEach((entry) => {
+        const r = results[entry.posterId];
+        if (!r) return;
+        r.votes += 1;
+        r.rankSum += entry.rank || 0;
+        if (entry.award) {
+          r.awardCounts[entry.award] = (r.awardCounts[entry.award] || 0) + 1;
+        }
+      });
+    });
+    Object.keys(results).forEach((id) => {
+      const r = results[id];
+      r.avgRank = r.votes > 0 ? r.rankSum / r.votes : null;
+    });
+    state.results = results;
+  }
+
+  function renderResultsOnCards() {
+    const totalBallots = (state.allBallots || []).length;
+    POSTERS.forEach((p) => {
+      const el = document.querySelector(`[data-results-for="${p.id}"]`);
+      if (!el) return;
+      const r = state.results[p.id] || { votes: 0, avgRank: null, awardCounts: {} };
+      if (r.votes === 0) {
+        el.innerHTML = `
+          <div class="res-headline">
+            <span class="no-votes">No votes yet</span>
+            <span>${totalBallots} ballot${totalBallots === 1 ? "" : "s"} cast</span>
+          </div>`;
+        return;
+      }
+      const chips = AWARDS.map((a) => {
+        const n = r.awardCounts[a.id] || 0;
+        if (n === 0) return "";
+        return `<span class="award-chip ${a.id}">${a.label} × ${n}</span>`;
+      })
+        .filter(Boolean)
+        .join("");
+      const avg = r.avgRank != null ? r.avgRank.toFixed(2) : "—";
+      el.innerHTML = `
+        <div class="res-headline">
+          <span><span class="votes">${r.votes} vote${r.votes === 1 ? "" : "s"}</span> · avg rank ${avg}</span>
+          <span>of ${totalBallots}</span>
+        </div>
+        <div class="res-awards">${chips || '<span class="no-votes">no award tags</span>'}</div>
+      `;
+    });
+  }
+
+  async function loadAndRenderResults() {
+    const doc = await fetchAllBallots();
+    state.allBallots = doc.ballots || [];
+    computeResults();
+    renderResultsOnCards();
   }
 
   // --- Thumbnail size slider ---
@@ -343,6 +450,11 @@
       b.classList.toggle("collapsed");
       $("#ballot-toggle").textContent = b.classList.contains("collapsed") ? "+" : "—";
     });
+
+    // Prime the cards with the "loading votes..." placeholder, then fetch.
+    computeResults();
+    renderResultsOnCards();
+    loadAndRenderResults();
   }
 
   if (document.readyState === "loading") {
