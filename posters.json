@@ -1,0 +1,178 @@
+[
+  {
+    "id": "p01-rayan-adi",
+    "artist": "Rayan Adi",
+    "grade": null,
+    "image": "p01-rayan-adi.png",
+    "original": "p01-rayan-adi.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p02-gwen-lies",
+    "artist": "Gwen Lies",
+    "grade": 9,
+    "image": "p02-gwen-lies.jpg",
+    "original": "p02-gwen-lies.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p03-nicholas-morgan",
+    "artist": "Nicholas Morgan",
+    "grade": null,
+    "image": "p03-nicholas-morgan.png",
+    "original": "p03-nicholas-morgan.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p04-meera-waregh",
+    "artist": "Meera Waregh",
+    "grade": null,
+    "image": "p04-meera-waregh.jpg",
+    "original": "p04-meera-waregh.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p05-boston-boucher",
+    "artist": "Boston Boucher",
+    "grade": null,
+    "image": "p05-boston-boucher.png",
+    "original": "p05-boston-boucher.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p06-james-finch",
+    "artist": "James Finch",
+    "grade": null,
+    "image": "p06-james-finch.png",
+    "original": "p06-james-finch.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p07-olivia-ghesquiere",
+    "artist": "Olivia Ghesquiere",
+    "grade": null,
+    "image": "p07-olivia-ghesquiere.png",
+    "original": "p07-olivia-ghesquiere.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p08-gwen-lies",
+    "artist": "Gwen Lies",
+    "grade": null,
+    "image": "p08-gwen-lies.jpg",
+    "original": "p08-gwen-lies.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p09-vanessa-lopez",
+    "artist": "Vanessa Lopez",
+    "grade": null,
+    "image": "p09-vanessa-lopez.png",
+    "original": "p09-vanessa-lopez.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p10-cal-classi",
+    "artist": "Cal Classi",
+    "grade": null,
+    "image": "p10-cal-classi.png",
+    "original": "p10-cal-classi.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p11-gigi-pineiro",
+    "artist": "Gigi Pineiro",
+    "grade": null,
+    "image": "p11-gigi-pineiro.png",
+    "original": "p11-gigi-pineiro.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p12-sam-kervin",
+    "artist": "Sam Kervin",
+    "grade": null,
+    "image": "p12-sam-kervin.jpg",
+    "original": "p12-sam-kervin.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p13-alia-elbouchti",
+    "artist": "Alia Elbouchti",
+    "grade": null,
+    "image": "p13-alia-elbouchti.png",
+    "original": "p13-alia-elbouchti.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p14-mera-hassan",
+    "artist": "Mera Hassan",
+    "grade": 9,
+    "image": "p14-mera-hassan.jpg",
+    "original": "p14-mera-hassan.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p15-jasmine-martin",
+    "artist": "Jasmine Martin",
+    "grade": 9,
+    "image": "p15-jasmine-martin.png",
+    "original": "p15-jasmine-martin.png",
+    "sourceType": "png"
+  },
+  {
+    "id": "p16-matthew-taylor",
+    "artist": "Matthew Taylor",
+    "grade": 9,
+    "image": "p16-matthew-taylor.png",
+    "original": "p16-matthew-taylor.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p17-meera-waregh",
+    "artist": "Meera Waregh",
+    "grade": 9,
+    "image": "p17-meera-waregh.jpg",
+    "original": "p17-meera-waregh.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p18-nik",
+    "artist": "Nik",
+    "grade": 11,
+    "image": "p18-nik.png",
+    "original": "p18-nik.pdf",
+    "sourceType": "pdf"
+  },
+  {
+    "id": "p19-nika-spiridonova",
+    "artist": "Nika Spiridonova",
+    "grade": 10,
+    "image": "p19-nika-spiridonova.jpg",
+    "original": "p19-nika-spiridonova.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p20-liv-parker",
+    "artist": "Liv Parker",
+    "grade": 10,
+    "image": "p20-liv-parker.jpg",
+    "original": "p20-liv-parker.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p21-cal-daut",
+    "artist": "Cal Daut",
+    "grade": null,
+    "image": "p21-cal-daut.jpg",
+    "original": "p21-cal-daut.jpg",
+    "sourceType": "jpg"
+  },
+  {
+    "id": "p22-mason-hicks",
+    "artist": "Mason Hicks",
+    "grade": null,
+    "image": "p22-mason-hicks.png",
+    "original": "p22-mason-hicks.pdf",
+    "sourceType": "pdf"
+  }
+]

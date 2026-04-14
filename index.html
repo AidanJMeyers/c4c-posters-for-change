@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Counselors for Change — Posters for Change 2026 Voting</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <h1>Posters for Change 2026 — Judging Ballot</h1>
+    <p class="subtitle">
+      Vote for up to <strong>8</strong> posters. Rank them in order of preference and assign
+      each one the award it best represents. Click any poster to zoom in.
+    </p>
+  </div>
+</header>
+
+<section class="voter-section wrap">
+  <label for="voter-name"><strong>Your name</strong> <span class="req">*</span></label>
+  <input type="text" id="voter-name" placeholder="First and last name" autocomplete="name" />
+  <label for="voter-affiliation" style="margin-top:.5rem"><strong>Affiliation / role</strong> <span class="hint">(optional — e.g., "C4C Board Member", "Judge")</span></label>
+  <input type="text" id="voter-affiliation" placeholder="Optional" />
+</section>
+
+<section class="awards-section wrap">
+  <h2>The Four Awards</h2>
+  <div class="awards-grid" id="awards-grid"></div>
+</section>
+
+<section class="categories-note wrap">
+  <h2>Award Tiers</h2>
+  <p>
+    Winners will be selected from three grade bands:
+    up to <strong>4 posters</strong> from junior high (grades 6–8),
+    up to <strong>4 posters</strong> from senior high (grades 9–12),
+    and up to <strong>2 posters</strong> from undergraduate college / trade &amp; technical school.
+    Your ballot can include posters from any tier — just rank your overall top 8.
+  </p>
+</section>
+
+<section class="posters-section wrap">
+  <div class="posters-header">
+    <h2>Submissions (<span id="poster-count">0</span>)</h2>
+    <div class="posters-toolbar">
+      <label class="small">Size
+        <input type="range" id="thumb-size" min="180" max="520" value="300" />
+      </label>
+      <button type="button" class="btn btn-ghost" id="clear-ballot">Clear ballot</button>
+    </div>
+  </div>
+  <div class="posters-grid" id="posters-grid"></div>
+</section>
+
+<!-- Sticky floating ballot -->
+<aside class="ballot" id="ballot">
+  <header class="ballot-header">
+    <h3>My Ballot <span id="ballot-count" class="count-chip">0 / 8</span></h3>
+    <button type="button" class="ballot-toggle" id="ballot-toggle" aria-label="Toggle ballot panel">—</button>
+  </header>
+  <ol class="ballot-list" id="ballot-list">
+    <li class="ballot-empty">No posters selected yet. Click a poster below to add it to your ballot.</li>
+  </ol>
+  <footer class="ballot-footer">
+    <button type="button" class="btn btn-primary" id="submit-btn">Submit ballot</button>
+    <button type="button" class="btn btn-ghost" id="download-btn">Download as file</button>
+    <p class="ballot-note">Your ranks run 1 (top choice) down to 8. You can submit fewer than 8 if you prefer.</p>
+  </footer>
+</aside>
+
+<!-- Zoom modal -->
+<div class="modal" id="modal" role="dialog" aria-hidden="true">
+  <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+  <div class="modal-body" id="modal-body"></div>
+  <div class="modal-info" id="modal-info"></div>
+</div>
+
+<!-- Submit success modal -->
+<div class="modal success" id="success-modal" role="dialog" aria-hidden="true">
+  <div class="success-card">
+    <h2>Thank you!</h2>
+    <p id="success-msg">Your ballot has been recorded.</p>
+    <button type="button" class="btn btn-primary" id="success-close">Close</button>
+  </div>
+</div>
+
+<footer class="site-footer wrap">
+  <p>Counselors for Change — Posters for Change 2026 · Built for internal judging use.</p>
+</footer>
+
+<script src="posters.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
