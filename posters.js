@@ -3,7 +3,6 @@ window.POSTERS = [
   { id: "p01-rayan-adi",        artist: "Rayan Adi",        grade: null, image: "posters/p01-rayan-adi.png",        original: "posters/p01-rayan-adi.pdf" },
   { id: "p02-gwen-lies",        artist: "Gwen Lies",        grade: 9,    image: "posters/p02-gwen-lies.jpg",        original: "posters/p02-gwen-lies.jpg" },
   { id: "p03-nicholas-morgan",  artist: "Nicholas Morgan",  grade: null, image: "posters/p03-nicholas-morgan.png",  original: "posters/p03-nicholas-morgan.pdf" },
-  { id: "p04-meera-waregh",     artist: "Meera Waregh",     grade: null, image: "posters/p04-meera-waregh.jpg",     original: "posters/p04-meera-waregh.jpg" },
   { id: "p05-boston-boucher",   artist: "Boston Boucher",   grade: null, image: "posters/p05-boston-boucher.png",   original: "posters/p05-boston-boucher.pdf" },
   { id: "p07-olivia-ghesquiere",artist: "Olivia Ghesquiere",grade: null, image: "posters/p07-olivia-ghesquiere.png",original: "posters/p07-olivia-ghesquiere.pdf" },
   { id: "p09-vanessa-lopez",    artist: "Vanessa Lopez",    grade: null, image: "posters/p09-vanessa-lopez.png",    original: "posters/p09-vanessa-lopez.pdf" },
