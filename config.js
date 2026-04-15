@@ -21,7 +21,7 @@
 
 window.C4C_CONFIG = {
   BACKEND: "jsonbin",               // "jsonbin" or "local" (offline-only test mode)
-  JSONBIN_BIN_ID: "PASTE_BIN_ID_HERE",
-  JSONBIN_MASTER_KEY: "PASTE_MASTER_KEY_HERE",
+  JSONBIN_BIN_ID: "69deeefa36566621a8b4636a",
+  JSONBIN_MASTER_KEY: "$2a$10$0fWcGvfYKWPi68MiU/FcSuuW05ucRQPGAAV6Hr3QMo/t6oKO28vnC",
   DEDUPE_BY_NAME: true,             // re-submissions replace your previous ballot
 };
