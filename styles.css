@@ -194,6 +194,20 @@ body {
 .poster-card .results .award-chip.prevent { background: #f8d7d7; color: var(--prevent); }
 .poster-card .results .no-votes { font-style: italic; opacity: .7; }
 
+.backend-banner {
+  background: #fff3bf;
+  border-bottom: 2px solid #f59f00;
+  color: #5c4300;
+  padding: .6rem 1.25rem;
+  font-size: .88rem;
+  text-align: center;
+}
+.backend-banner code {
+  background: rgba(0,0,0,.08);
+  padding: 0 .3rem;
+  border-radius: 3px;
+}
+
 /* Sticky ballot */
 .ballot {
   position: fixed;

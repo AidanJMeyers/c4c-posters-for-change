@@ -251,29 +251,79 @@
     return null;
   }
 
-  // --- Backend: JSONBlob (anonymous shared JSON store) ---
+  // --- Backend: JSONBin.io (CORS-friendly) with local-storage fallback ---
+  function jsonbinConfigured() {
+    return (
+      CONFIG.BACKEND === "jsonbin" &&
+      CONFIG.JSONBIN_BIN_ID &&
+      CONFIG.JSONBIN_MASTER_KEY &&
+      !CONFIG.JSONBIN_BIN_ID.startsWith("PASTE_") &&
+      !CONFIG.JSONBIN_MASTER_KEY.startsWith("PASTE_")
+    );
+  }
+
+  function jsonbinHeaders() {
+    return {
+      "Content-Type": "application/json",
+      "X-Master-Key": CONFIG.JSONBIN_MASTER_KEY,
+      "X-Bin-Versioning": "false",
+    };
+  }
+
   async function fetchAllBallots() {
-    if (!CONFIG.BLOB_URL) return { ballots: [] };
+    if (jsonbinConfigured()) {
+      try {
+        const url = `https://api.jsonbin.io/v3/b/${CONFIG.JSONBIN_BIN_ID}/latest`;
+        const res = await fetch(url, {
+          headers: { "X-Master-Key": CONFIG.JSONBIN_MASTER_KEY },
+          cache: "no-store",
+        });
+        if (!res.ok) throw new Error("GET " + res.status);
+        const data = await res.json();
+        const record = data && data.record ? data.record : { ballots: [] };
+        if (!Array.isArray(record.ballots)) record.ballots = [];
+        return record;
+      } catch (e) {
+        console.warn("JSONBin fetch failed, falling back to local:", e);
+      }
+    }
+    // local fallback
     try {
-      const res = await fetch(CONFIG.BLOB_URL, { cache: "no-store" });
-      if (!res.ok) throw new Error("GET " + res.status);
-      const data = await res.json();
-      if (!data || !Array.isArray(data.ballots)) return { ballots: [] };
-      return data;
+      const raw = localStorage.getItem("c4c_ballots");
+      return raw ? JSON.parse(raw) : { ballots: [] };
     } catch (e) {
-      console.warn("Could not fetch existing ballots:", e);
       return { ballots: [] };
     }
   }
 
   async function putAllBallots(doc) {
-    const res = await fetch(CONFIG.BLOB_URL, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify(doc),
-    });
-    if (!res.ok) throw new Error("PUT " + res.status);
-    return res;
+    if (jsonbinConfigured()) {
+      const url = `https://api.jsonbin.io/v3/b/${CONFIG.JSONBIN_BIN_ID}`;
+      const res = await fetch(url, {
+        method: "PUT",
+        headers: jsonbinHeaders(),
+        body: JSON.stringify(doc),
+      });
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error("PUT " + res.status + " " + txt);
+      }
+      return res;
+    }
+    // local fallback
+    localStorage.setItem("c4c_ballots", JSON.stringify(doc));
+    return { ok: true };
+  }
+
+  function showBackendBanner() {
+    if (jsonbinConfigured()) return;
+    const bar = document.createElement("div");
+    bar.className = "backend-banner";
+    bar.innerHTML =
+      "⚠️ Results are being stored <strong>locally in this browser only</strong> " +
+      "(JSONBin not yet configured). Finish the one-time setup in <code>config.js</code> " +
+      "to share results across judges.";
+    document.body.prepend(bar);
   }
 
   async function submitBallot() {
@@ -451,6 +501,7 @@
       $("#ballot-toggle").textContent = b.classList.contains("collapsed") ? "+" : "—";
     });
 
+    showBackendBanner();
     // Prime the cards with the "loading votes..." placeholder, then fetch.
     computeResults();
     renderResultsOnCards();
