@@ -315,16 +315,7 @@
     return { ok: true };
   }
 
-  function showBackendBanner() {
-    if (jsonbinConfigured()) return;
-    const bar = document.createElement("div");
-    bar.className = "backend-banner";
-    bar.innerHTML =
-      "⚠️ Results are being stored <strong>locally in this browser only</strong> " +
-      "(JSONBin not yet configured). Finish the one-time setup in <code>config.js</code> " +
-      "to share results across judges.";
-    document.body.prepend(bar);
-  }
+  function showBackendBanner() { /* disabled */ }
 
   async function submitBallot() {
     const payload = buildPayload();
